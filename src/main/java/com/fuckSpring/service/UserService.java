@@ -32,13 +32,7 @@ public class UserService {
         return null;
     }
 
-
     public User findByName(String name) {
         return this.userRepository.findByName(name);
-    }
-
-    @Scheduled(fixedRate = 3000)
-    public void testScheduled(){
-        System.out.println(new Date());
     }
 }

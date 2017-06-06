@@ -28,7 +28,7 @@ public class XinfulaiqiaomenService {
     @Autowired
     private OkHttpClient okHttpClient;
 
-    @Scheduled(fixedDelay = 3000)
+//    @Scheduled(fixedDelay = 3000)
     public boolean startPolling() throws IOException, InterruptedException {
         boolean flag = false;
         //第一次请求

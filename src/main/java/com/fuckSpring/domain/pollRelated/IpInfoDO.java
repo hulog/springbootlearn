@@ -7,10 +7,15 @@ public class IpInfoDO {
 
     private String ip;
     private Integer port;
+    private String addr;
 
-    public IpInfoDO(String ip, Integer port) {
+    public IpInfoDO() {
+    }
+
+    public IpInfoDO(String ip, Integer port, String addr) {
         this.ip = ip;
         this.port = port;
+        this.addr = addr;
     }
 
     @Override
@@ -18,6 +23,7 @@ public class IpInfoDO {
         return "IpInfoDO{" +
                 "ip='" + ip + '\'' +
                 ", port=" + port +
+                ", addr='" + addr + '\'' +
                 '}';
     }
 
@@ -35,5 +41,13 @@ public class IpInfoDO {
 
     public void setPort(Integer port) {
         this.port = port;
+    }
+
+    public String getAddr() {
+        return addr;
+    }
+
+    public void setAddr(String addr) {
+        this.addr = addr;
     }
 }
