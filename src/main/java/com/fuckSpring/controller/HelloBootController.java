@@ -3,7 +3,7 @@ package com.fuckSpring.controller;
 import com.fuckSpring.domain.User;
 import com.fuckSpring.service.UserService;
 import com.fuckSpring.service.pollService.HttpSenderService;
-import com.fuckSpring.service.pollService.xinfulaiqiaomen.XinfulaiqiaomenService;
+import com.fuckSpring.service.pollService.xinfulaiqiaomen.XflqmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,7 +33,7 @@ public class HelloBootController {
     private HttpSenderService httpSenderService;
 
     @Autowired
-    private XinfulaiqiaomenService xinfulaiqiaomenService;
+    private XflqmService xinfulaiqiaomenService;
 
 
     @ApiOperation(value = "获取服务器返回头内容", notes = "从服务器返回的Header中解析")

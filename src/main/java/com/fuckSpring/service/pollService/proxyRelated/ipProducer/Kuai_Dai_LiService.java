@@ -32,17 +32,17 @@ public class Kuai_Dai_LiService implements HttpProxySpider {
     public static final String HREF = "http://www.kuaidaili.com/free/inha/";
     private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0";
 
-    private int count = 0;
+    private int count = 1;
 
     @Override
     public String createProxyUrl(int pageNum) {
         return HREF + pageNum + "/";
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 1000)
     public void run(){
         logger.info("=================================================");
-        getProxyIp(createProxyUrl(count++));
+        getProxyIp(createProxyUrl(count < 21 ? count++ : (count = 1)));
     }
 
     @Override
@@ -57,10 +57,10 @@ public class Kuai_Dai_LiService implements HttpProxySpider {
         String doc;
         try {
             rsp = this.okHttpClient.newCall(req).execute();
-            if (null != rsp) {
+            if (null != rsp && rsp.isSuccessful()) {
                 doc = rsp.body().string();
                 rstList = parse(doc);
-                logger.info(">>快代理<< 在{}中爬取到 {} 条数据", url, rstList.size());
+                logger.info(">>快代理<< 在 {} 中爬取到 {} 条数据", url, rstList.size());
             }
         } catch (IOException e) {
             logger.error("!!!!!Ops,爬取IP出错:{}", e.getMessage());
@@ -69,7 +69,7 @@ public class Kuai_Dai_LiService implements HttpProxySpider {
     }
 
     private List<IpInfoDO> parse(String doc) {
-        if (null == doc || doc.length() <= 0) {
+        if (null == doc || doc.length() <= 30) {
             return null;
         }
         List<IpInfoDO> rstList = new ArrayList<>();

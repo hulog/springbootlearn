@@ -10,14 +10,14 @@ import okhttp3.Response;
  */
 public interface PollService {
 
-    // 构造Get请求并发送
-    Request makeGetRequestAndSend(String url, Headers headers);
-
-    // 构造Post请求并发送
-    Request makePostRequestAndSend(String url, Headers headers, RequestBody requestBody);
+//    // 构造Get请求并发送
+//    Request makeGetRequestAndSend(String url, Headers headers);
+//
+//    // 构造Post请求并发送
+//    Request makePostRequestAndSend(String url, Headers headers, RequestBody requestBody);
 
     // 开始投票
-    boolean startPolling();
+    void startPolling();
 
     // 验证每次投票是否成功
     boolean isPollSuccessful();

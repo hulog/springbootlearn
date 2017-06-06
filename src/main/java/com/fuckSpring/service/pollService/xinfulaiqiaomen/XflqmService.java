@@ -8,7 +8,6 @@ import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,9 +16,9 @@ import java.io.IOException;
  * Created by upsmart on 17-6-5.
  */
 @Service
-public class XinfulaiqiaomenService {
+public class XflqmService {
 
-    private static final Logger logger = LoggerFactory.getLogger(XinfulaiqiaomenService.class);
+    private static final Logger logger = LoggerFactory.getLogger(XflqmService.class);
     private static final String URL1 = "http://vote.gzdsb.net/vote/index/load.html?rnd=&pid=5&id=42&callback=?";
     private static final String URL2 = "http://vote.gzdsb.net/vote/index/vote.html?rnd=&pid=5&id=42&callback=?";
     private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0";
@@ -28,7 +27,6 @@ public class XinfulaiqiaomenService {
     @Autowired
     private OkHttpClient okHttpClient;
 
-//    @Scheduled(fixedDelay = 3000)
     public boolean startPolling() throws IOException, InterruptedException {
         boolean flag = false;
         //第一次请求
