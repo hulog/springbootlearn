@@ -1,5 +1,6 @@
 package com.fuckSpring.service.pollService;
 
+import com.fuckSpring.domain.pollRelated.IpInfoDO;
 import okhttp3.Headers;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -20,5 +21,5 @@ public interface PollService {
     void startPolling();
 
     // 验证每次投票是否成功
-    boolean isPollSuccessful();
+    boolean isPollSuccessful(IpInfoDO ipInfoDO);
 }

@@ -2,6 +2,8 @@ package com.fuckSpring.service.pollService.xinfulaiqiaomen;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fuckSpring.domain.pollRelated.IpInfoDO;
+import com.fuckSpring.service.pollService.PollService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -16,7 +18,7 @@ import java.io.IOException;
  * Created by upsmart on 17-6-5.
  */
 @Service
-public class XflqmService {
+public class XflqmService implements PollService{
 
     private static final Logger logger = LoggerFactory.getLogger(XflqmService.class);
     private static final String URL1 = "http://vote.gzdsb.net/vote/index/load.html?rnd=&pid=5&id=42&callback=?";
@@ -27,7 +29,14 @@ public class XflqmService {
     @Autowired
     private OkHttpClient okHttpClient;
 
-    public boolean startPolling() throws IOException, InterruptedException {
+    @Override
+    public void startPolling() {
+        IpInfoDO ipInfoDO = new IpInfoDO();
+        isPollSuccessful(ipInfoDO);
+    }
+
+    @Override
+    public boolean isPollSuccessful(IpInfoDO ipInfoDO) {
         boolean flag = false;
         //第一次请求
         Request req = new Request.Builder()

@@ -2,7 +2,7 @@ package com.fuckSpring.controller;
 
 import com.fuckSpring.domain.User;
 import com.fuckSpring.service.UserService;
-import com.fuckSpring.service.pollService.HttpSenderService;
+import com.fuckSpring.service.pollService.xinfulaiqiaomen.HttpSenderTestService;
 import com.fuckSpring.service.pollService.xinfulaiqiaomen.XflqmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +30,7 @@ public class HelloBootController {
     private UserService userService;
 
     @Autowired
-    private HttpSenderService httpSenderService;
+    private HttpSenderTestService httpSenderTestService;
 
     @Autowired
     private XflqmService xinfulaiqiaomenService;
@@ -41,7 +41,7 @@ public class HelloBootController {
     public String getNginxVersion(@RequestParam(value = "url") String url,
                                   @RequestParam(value = "headerName") String headerName) {
         try {
-            return this.httpSenderService.getHeaderValueByName(url, headerName);
+            return this.httpSenderTestService.getHeaderValueByName(url, headerName);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

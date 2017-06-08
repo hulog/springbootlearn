@@ -1,4 +1,4 @@
-package com.fuckSpring.service.pollService;
+package com.fuckSpring.service.pollService.xinfulaiqiaomen;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -14,9 +14,9 @@ import java.io.IOException;
  * Created by upsmart on 17-6-2.
  */
 @Service
-public class HttpSenderService {
+public class HttpSenderTestService {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpSenderService.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpSenderTestService.class);
 
     @Autowired
     private OkHttpClient okHttpClient;
@@ -62,7 +62,6 @@ public class HttpSenderService {
         logger.info("网络请求失败");
         return null;
     }
-
 
     public String getPostBody(String url) {
         Request req = new Request.Builder()
