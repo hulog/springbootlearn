@@ -1,7 +1,6 @@
-package com.fuckSpring.service.pollService.proxyRelated.ipProducer;
+package com.fuckSpring.service.pollService.proxyRelated;
 
 import com.fuckSpring.domain.pollRelated.IpInfoDO;
-import com.fuckSpring.service.pollService.proxyRelated.HttpProxySpider;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -9,9 +8,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -22,27 +22,45 @@ import java.util.List;
  * Created by upsmart on 17-6-6.
  */
 @Service
-public class Kuai_Dai_LiService implements HttpProxySpider {
+public class KuaidailiService implements HttpProxySpider {
 
-    private static final Logger logger = LoggerFactory.getLogger(Kuai_Dai_LiService.class);
+    private static final Logger logger = LoggerFactory.getLogger(KuaidailiService.class);
 
     @Autowired
     private OkHttpClient okHttpClient;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     public static final String HREF = "http://www.kuaidaili.com/free/inha/";
     private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0";
 
-    private int count = 1;
+    private static int count = 0;
 
     @Override
     public String createProxyUrl(int pageNum) {
         return HREF + pageNum + "/";
     }
 
-    @Scheduled(fixedDelay = 1000)
-    public void run(){
+    @Scheduled(fixedDelay = 10 * 1000)
+    public void run() {
         logger.info("=================================================");
-        getProxyIp(createProxyUrl(count < 21 ? count++ : (count = 1)));
+        List<IpInfoDO> proxyIp = getProxyIp(createProxyUrl(count < 20 ? ++count : (count = 1)));
+        if (count == 1) {
+            String kdl01 = this.stringRedisTemplate.opsForValue().get("kdl01");
+            if (null != kdl01 && kdl01.equals(proxyIp.get(0).getIp())) {
+                count = 0;
+                logger.info(">>快代理<< 代理未更新,请等待......");
+            } else {
+                logger.info(">>快代理<< 数据已更新,爬取中......");
+                this.stringRedisTemplate.opsForValue().set("kdl01", proxyIp.get(0).getIp());
+                this.amqpTemplate.convertAndSend("Ip_Proxy_Queue", proxyIp);
+            }
+        } else {
+            this.amqpTemplate.convertAndSend("Ip_Proxy_Queue", proxyIp);
+
+        }
     }
 
     @Override
@@ -69,7 +87,7 @@ public class Kuai_Dai_LiService implements HttpProxySpider {
     }
 
     private List<IpInfoDO> parse(String doc) {
-        if (null == doc || doc.length() <= 30) {
+        if (null == doc || doc.length() <= 0) {
             return null;
         }
         List<IpInfoDO> rstList = new ArrayList<>();

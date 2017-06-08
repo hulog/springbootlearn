@@ -1,9 +1,13 @@
 package com.fuckSpring.domain.pollRelated;
 
+import java.io.Serializable;
+
 /**
  * Created by upsmart on 17-6-5.
  */
-public class IpInfoDO {
+public class IpInfoDO implements Serializable{
+
+    private static final long serialVersionUID = -8937194876835217366L;
 
     private String ip;
     private Integer port;

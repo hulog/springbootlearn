@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * Created by upsmart on 17-5-11.
  */
 @Component
-@ConfigurationProperties(prefix = "mysql")
+//@ConfigurationProperties(prefix = "mysql")
 public class MysqlProperties {
     private String url;
     private String user;
