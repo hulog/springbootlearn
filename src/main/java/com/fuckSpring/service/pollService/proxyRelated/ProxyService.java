@@ -15,9 +15,12 @@ public interface ProxyService {
 
     List<IpInfoDO> parseBody(String body);
 
+    void sendToProxyPool(IpInfoDO ipInfoDO);
+
     void spiderRun();
 
-    List<IpInfoDO> getProxyIps(String url);
 
-    boolean isTestOk(IpInfoDO ipInfoDO);
+//    List<IpInfoDO> getProxyIps(String url);
+
+//    boolean isTestOk(IpInfoDO ipInfoDO);
 }

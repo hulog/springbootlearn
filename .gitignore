@@ -1,3 +1,5 @@
 demo.iml
 .idea/*
 .mvn/*
+/lib/*
+/target/*

@@ -8,18 +8,29 @@ import java.util.List;
  * Created by upsmart on 17-6-8.
  */
 public class XicidailiService implements ProxyService {
+
     @Override
     public String createSpiderUrl(int pageNum) {
         return null;
     }
 
     @Override
-    public List<IpInfoDO> getProxyIps(String url) {
+    public String getHtmlByUrl(String url) {
         return null;
     }
 
     @Override
-    public boolean isTestOk(IpInfoDO ipInfoDO) {
-        return false;
+    public List<IpInfoDO> parseBody(String body) {
+        return null;
+    }
+
+    @Override
+    public void sendToProxyPool(IpInfoDO ipInfoDO) {
+
+    }
+
+    @Override
+    public void spiderRun() {
+
     }
 }
