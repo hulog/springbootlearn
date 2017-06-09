@@ -7,9 +7,11 @@ import java.util.List;
 /**
  * Created by upsmart on 17-6-6.
  */
-public interface HttpProxySpider {
+public interface ProxyService {
 
-    String createProxyUrl(int pageNum);
+    String createSpiderUrl(int pageNum);
 
-    List<IpInfoDO> getProxyIp(String url);
+    List<IpInfoDO> getProxyIps(String url);
+
+    boolean isTestOk(IpInfoDO ipInfoDO);
 }

@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,11 @@ import java.util.List;
  * Created by upsmart on 17-6-6.
  */
 @Service
-public class KuaidailiService implements HttpProxySpider {
+public class KuaidailiService implements ProxyService {
 
-    private static final Logger logger = LoggerFactory.getLogger(KuaidailiService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProxyService.class);
 
+    @Qualifier("getClient")
     @Autowired
     private OkHttpClient okHttpClient;
     @Autowired
@@ -39,14 +41,14 @@ public class KuaidailiService implements HttpProxySpider {
     private static int count = 0;
 
     @Override
-    public String createProxyUrl(int pageNum) {
+    public String createSpiderUrl(int pageNum) {
         return HREF + pageNum + "/";
     }
 
     @Scheduled(fixedDelay = 10 * 1000)
     public void run() {
         logger.info("=================================================");
-        List<IpInfoDO> proxyIp = getProxyIp(createProxyUrl(count < 20 ? ++count : (count = 1)));
+        List<IpInfoDO> proxyIp = getProxyIps(createSpiderUrl(count < 20 ? ++count : (count = 1)));
         if (count == 1) {
             String kdl01 = this.stringRedisTemplate.opsForValue().get("kdl01");
             if (null != kdl01 && kdl01.equals(proxyIp.get(0).getIp())) {
@@ -64,7 +66,7 @@ public class KuaidailiService implements HttpProxySpider {
     }
 
     @Override
-    public List<IpInfoDO> getProxyIp(String url) {
+    public List<IpInfoDO> getProxyIps(String url) {
         List<IpInfoDO> rstList = null;
         Request req = new Request.Builder()
                 .url(url)
@@ -78,12 +80,18 @@ public class KuaidailiService implements HttpProxySpider {
             if (null != rsp && rsp.isSuccessful()) {
                 doc = rsp.body().string();
                 rstList = parse(doc);
-                logger.info(">>快代理<< 在 {} 中爬取到 {} 条数据", url, rstList.size());
+                logger.info(">>快代理<< 在 {} 中爬取到 {} 条可用代理", url, rstList.size());
             }
         } catch (IOException e) {
             logger.error("!!!!!Ops,爬取IP出错:{}", e.getMessage());
         }
         return rstList;
+    }
+
+    @Override
+    public boolean isTestOk(IpInfoDO ipInfoDO) {
+
+        return false;
     }
 
     private List<IpInfoDO> parse(String doc) {
@@ -106,7 +114,9 @@ public class KuaidailiService implements HttpProxySpider {
             infoDO.setIp(ip);
             infoDO.setPort(Integer.parseInt(port));
             infoDO.setAddr(addr);
-            rstList.add(infoDO);
+            if (isTestOk(infoDO)) {
+                rstList.add(infoDO);
+            }
         });
         return rstList;
     }
