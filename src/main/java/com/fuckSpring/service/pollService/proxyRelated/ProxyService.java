@@ -11,6 +11,12 @@ public interface ProxyService {
 
     String createSpiderUrl(int pageNum);
 
+    String getHtmlByUrl(String url);
+
+    List<IpInfoDO> parseBody(String body);
+
+    void spiderRun();
+
     List<IpInfoDO> getProxyIps(String url);
 
     boolean isTestOk(IpInfoDO ipInfoDO);

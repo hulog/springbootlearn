@@ -45,6 +45,37 @@ public class KuaidailiService implements ProxyService {
         return HREF + pageNum + "/";
     }
 
+    @Override
+    public String getHtmlByUrl(String url) {
+        List<IpInfoDO> rstList = null;
+        Request req = new Request.Builder()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .get()
+                .build();
+        Response rsp;
+        String html = null;
+        try {
+            rsp = this.okHttpClient.newCall(req).execute();
+            if (null != rsp && rsp.isSuccessful()) {
+                html = rsp.body().string();
+            }
+        } catch (IOException e) {
+            logger.error("!!!!!Ops,爬取IP出错:{}", e.getMessage());
+        }
+        return html;
+    }
+
+    @Override
+    public List<IpInfoDO> parseBody(String body) {
+        return null;
+    }
+
+    @Override
+    public void spiderRun() {
+
+    }
+
     @Scheduled(fixedDelay = 10 * 1000)
     public void run() {
         logger.info("=================================================");

@@ -17,4 +17,9 @@ public class XicidailiService implements ProxyService {
     public List<IpInfoDO> getProxyIps(String url) {
         return null;
     }
+
+    @Override
+    public boolean isTestOk(IpInfoDO ipInfoDO) {
+        return false;
+    }
 }
