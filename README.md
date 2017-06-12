@@ -1,6 +1,6 @@
-https://img.shields.io/badge/SpringBoot-1.5.3.RELEASE-green.svg
+[![Travis](https://img.shields.io/badge/SpringBoot-1.5.3.RELEASE-green.svg?style=plastic)](http://spring.io/)
 
-===
+=====
 
 ## 简介 
 基于springboot框架，学习各种中间件如redis/rabbitmq/okhttp3等。 
