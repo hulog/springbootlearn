@@ -1,4 +1,4 @@
-[![Travis](https://img.shields.io/badge/SpringBoot-1.5.3.RELEASE-green.svg?style=plastic)](http://spring.io/)[![Travis](https://img.shields.io/badge/OkHttp-3.8.0-green.svg?style=plastic)](http://square.github.io/okhttp/)
+[![Travis](https://img.shields.io/badge/SpringBoot-1.5.3.RELEASE-green.svg?style=plastic)](http://spring.io/)  [![Travis](https://img.shields.io/badge/OkHttp-3.8.0-green.svg?style=plastic)](http://square.github.io/okhttp/)  [![Travis](https://img.shields.io/travis/rust-lang/rust.svg?style=plastic)](https://github.com/hulog/springbootlearn/)
 
 ---
 
