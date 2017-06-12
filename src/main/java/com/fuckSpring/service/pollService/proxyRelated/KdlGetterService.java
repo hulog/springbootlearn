@@ -13,6 +13,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,28 +27,37 @@ public final class KdlGetterService implements GetterService {
 
     private static final Logger logger = LoggerFactory.getLogger(GetterService.class);
 
-    @Qualifier("getClient")
-    @Autowired
-    private OkHttpClient okHttpClient;
-    @Autowired
-    private AmqpTemplate amqpTemplate;
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private final OkHttpClient okHttpClient;
+    private final AmqpTemplate amqpTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
 
     // 爬取代理的目标网站相关
     private static final String HREF = "http://www.kuaidaili.com/proxylist/";
     private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0";
 
     private static final int MAX_PAGE = 10; //主页只支持10页查询
-    private int current_page = 0;
+//    private int current_page = 0;
+
+
+    @Autowired
+    public KdlGetterService(AmqpTemplate amqpTemplate, StringRedisTemplate stringRedisTemplate, @Qualifier("getClient") OkHttpClient okHttpClient) {
+        this.amqpTemplate = amqpTemplate;
+        this.stringRedisTemplate = stringRedisTemplate;
+        this.okHttpClient = okHttpClient;
+    }
+
+    @Override
+    public int getMaxPage() {
+        return MAX_PAGE;
+    }
 
     @Override
     public String createSpiderUrl(int pageNum) {
         if (pageNum < 1) {
-            logger.error("pageNum应大于1,当前值: {}", pageNum);
+            logger.error("[快代理] pageNum应大于1,当前值: {}", pageNum);
             return null;
         }
-        logger.info("爬取第 {} 页中......");
+        logger.info("[快代理] 爬取第 {} 页中......", pageNum);
         return HREF + pageNum + "/";
     }
 
@@ -73,7 +83,7 @@ public final class KdlGetterService implements GetterService {
                 }
             }
         } catch (Exception e) {
-            logger.error("!!!!!Ops,爬取url: {} 出错:{}", url, e.getMessage());
+            logger.error("[快代理] !!!!!Ops,爬取url: {} 出错:{}", url, e.getMessage());
         }
         return html;
     }
@@ -109,32 +119,34 @@ public final class KdlGetterService implements GetterService {
 
     }
 
-    @Override
-    public List<IpInfoDO> spiderRun() {
-        logger.info("Start==================Kuai==Dai==Li===========================");
-        List<IpInfoDO> rstList = new ArrayList<>();
-        List<IpInfoDO> proxyIps;
-        while (current_page < MAX_PAGE) {
-            current_page++;
-            String spiderUrl = createSpiderUrl(current_page);
-            proxyIps = parseBody(getHtmlByUrl(spiderUrl));
-            logger.info("在 {} 中爬取到 {} 条数据", spiderUrl, proxyIps.size());
-            rstList.addAll(proxyIps);
-        }
-//            if (current_page == 1) {
-//                String kdl01 = this.stringRedisTemplate.opsForValue().get("kdl01");
-//                if (null != kdl01 && kdl01.equals(proxyIp.get(0).getIp())) {
-//                    current_page = 0;
-//                    logger.info(">>快代理<< 代理未更新,请等待......");
-//                } else {
-//                    logger.info(">>快代理<< 数据已更新,爬取中......");
-//                    this.stringRedisTemplate.opsForValue().set("kdl01", proxyIp.get(0).getIp());
-//                    this.amqpTemplate.convertAndSend("Ip_Proxy_Queue", proxyIp);
-//                }
-//            } else {
-//                this.amqpTemplate.convertAndSend("Ip_Proxy_Queue", proxyIp);
-//            }
-        logger.info("End==================Kuai==Dai==Li===========================");
-        return rstList;
-    }
+//    @Override
+//    public List<IpInfoDO> spiderRun() {
+//        logger.info("Start==================Kuai==Dai==Li===========================");
+//        List<IpInfoDO> rstList = new ArrayList<>();
+//        List<IpInfoDO> proxyIps;
+//        current_page = 0;
+//        while (current_page < MAX_PAGE) {
+//            current_page++;
+//            String spiderUrl = createSpiderUrl(current_page);
+//            proxyIps = parseBody(getHtmlByUrl(spiderUrl));
+//            logger.info("在 {} 中爬取到 {} 条数据", spiderUrl, proxyIps.size());
+//            rstList.addAll(proxyIps);
+//        }
+////            if (current_page == 1) {
+////                String kdl01 = this.stringRedisTemplate.opsForValue().get("kdl01");
+////                if (null != kdl01 && kdl01.equals(proxyIp.get(0).getIp())) {
+////                    current_page = 0;
+////                    logger.info(">>快代理<< 代理未更新,请等待......");
+////                } else {
+////                    logger.info(">>快代理<< 数据已更新,爬取中......");
+////                    this.stringRedisTemplate.opsForValue().set("kdl01", proxyIp.get(0).getIp());
+////                    this.amqpTemplate.convertAndSend("Ip_Proxy_Queue", proxyIp);
+////                }
+////            } else {
+////                this.amqpTemplate.convertAndSend("Ip_Proxy_Queue", proxyIp);
+////            }
+//        logger.info("End==================Kuai==Dai==Li===========================");
+//        rstList.forEach(System.out::println);
+//        return rstList;
+//    }
 }

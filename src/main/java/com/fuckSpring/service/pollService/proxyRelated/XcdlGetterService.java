@@ -10,6 +10,11 @@ import java.util.List;
 public class XcdlGetterService implements GetterService {
 
     @Override
+    public int getMaxPage() {
+        return 0;
+    }
+
+    @Override
     public String createSpiderUrl(int pageNum) {
         return null;
     }
@@ -25,8 +30,7 @@ public class XcdlGetterService implements GetterService {
     }
 
     @Override
-    public List<IpInfoDO> spiderRun() {
+    public void sendToProxyPool(IpInfoDO ipInfoDO) {
 
-        return null;
     }
 }
