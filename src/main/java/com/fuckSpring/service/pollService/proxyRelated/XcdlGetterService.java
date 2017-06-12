@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by upsmart on 17-6-8.
  */
-public class XicidailiService implements ProxyService {
+public class XcdlGetterService implements GetterService {
 
     @Override
     public String createSpiderUrl(int pageNum) {
@@ -25,12 +25,8 @@ public class XicidailiService implements ProxyService {
     }
 
     @Override
-    public void sendToProxyPool(IpInfoDO ipInfoDO) {
+    public List<IpInfoDO> spiderRun() {
 
-    }
-
-    @Override
-    public void spiderRun() {
-
+        return null;
     }
 }

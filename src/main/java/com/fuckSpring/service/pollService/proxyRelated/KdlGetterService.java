@@ -22,9 +22,9 @@ import java.util.List;
  * Created by upsmart on 17-6-6.
  */
 @Service
-public class KuaidailiService implements ProxyService {
+public final class KdlGetterService implements GetterService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProxyService.class);
+    private static final Logger logger = LoggerFactory.getLogger(GetterService.class);
 
     @Qualifier("getClient")
     @Autowired
@@ -34,14 +34,20 @@ public class KuaidailiService implements ProxyService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    private static final String HREF = "http://www.kuaidaili.com/free/inha/";
+    // 爬取代理的目标网站相关
+    private static final String HREF = "http://www.kuaidaili.com/proxylist/";
     private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0";
 
-    private static final int MAX_PAGE = 20;
+    private static final int MAX_PAGE = 10; //主页只支持10页查询
     private int current_page = 0;
 
     @Override
     public String createSpiderUrl(int pageNum) {
+        if (pageNum < 1) {
+            logger.error("pageNum应大于1,当前值: {}", pageNum);
+            return null;
+        }
+        logger.info("爬取第 {} 页中......");
         return HREF + pageNum + "/";
     }
 
@@ -89,7 +95,7 @@ public class KuaidailiService implements ProxyService {
             IpInfoDO infoDO = new IpInfoDO();
             String ip = tr.child(0).text();
             String port = tr.child(1).text();
-            String addr = tr.child(4).text();
+            String addr = tr.child(5).text();
             infoDO.setIp(ip);
             infoDO.setPort(Integer.parseInt(port));
             infoDO.setAddr(addr);
@@ -100,15 +106,20 @@ public class KuaidailiService implements ProxyService {
 
     @Override
     public void sendToProxyPool(IpInfoDO ipInfoDO) {
+
     }
 
     @Override
-    public void spiderRun() {
+    public List<IpInfoDO> spiderRun() {
         logger.info("Start==================Kuai==Dai==Li===========================");
+        List<IpInfoDO> rstList = new ArrayList<>();
+        List<IpInfoDO> proxyIps;
         while (current_page < MAX_PAGE) {
             current_page++;
-            List<IpInfoDO> proxyIp = parseBody(getHtmlByUrl(createSpiderUrl(current_page)));
-            proxyIp.forEach(this::sendToProxyPool);
+            String spiderUrl = createSpiderUrl(current_page);
+            proxyIps = parseBody(getHtmlByUrl(spiderUrl));
+            logger.info("在 {} 中爬取到 {} 条数据", spiderUrl, proxyIps.size());
+            rstList.addAll(proxyIps);
         }
 //            if (current_page == 1) {
 //                String kdl01 = this.stringRedisTemplate.opsForValue().get("kdl01");
@@ -124,5 +135,6 @@ public class KuaidailiService implements ProxyService {
 //                this.amqpTemplate.convertAndSend("Ip_Proxy_Queue", proxyIp);
 //            }
         logger.info("End==================Kuai==Dai==Li===========================");
+        return rstList;
     }
 }

@@ -34,6 +34,7 @@ public class HttpSenderTestService {
         //获取Response
         Response rsp = this.okHttpClient.newCall(req).execute();
         if (!rsp.isSuccessful()) {
+            //FIXME help me
             rstString = String.valueOf(rsp.code());
             logger.info("链接不成功,返回码:{}", rsp.code());
             return rstString;

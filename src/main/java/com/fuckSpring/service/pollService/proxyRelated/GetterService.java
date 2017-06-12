@@ -5,9 +5,11 @@ import com.fuckSpring.domain.pollRelated.IpInfoDO;
 import java.util.List;
 
 /**
+ * Proxy 爬取接口，爬取各大代理网站都需实现此接口
+ *
  * Created by upsmart on 17-6-6.
  */
-public interface ProxyService {
+public interface GetterService {
 
     String createSpiderUrl(int pageNum);
 
@@ -15,12 +17,7 @@ public interface ProxyService {
 
     List<IpInfoDO> parseBody(String body);
 
-    void sendToProxyPool(IpInfoDO ipInfoDO);
+//    void sendToProxyPool(IpInfoDO ipInfoDO);
 
-    void spiderRun();
-
-
-//    List<IpInfoDO> getProxyIps(String url);
-
-//    boolean isTestOk(IpInfoDO ipInfoDO);
+    List<IpInfoDO> spiderRun();
 }
