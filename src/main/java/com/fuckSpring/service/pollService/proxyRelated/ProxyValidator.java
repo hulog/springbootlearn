@@ -57,7 +57,7 @@ public class ProxyValidator {
 //                System.out.println(execute.body().bytes());
             System.out.println(execute.body().string());
             System.out.println("成功次数：" + su.incrementAndGet());
-            stringRedisTemplate.opsForValue().set(String.valueOf(su),ipInfoDO.toString());
+            stringRedisTemplate.opsForValue().set(String.valueOf(su), ipInfoDO.toString());
         } else {
             System.out.println("失败次数了");
         }

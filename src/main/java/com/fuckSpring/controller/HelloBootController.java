@@ -1,6 +1,7 @@
 package com.fuckSpring.controller;
 
 import com.fuckSpring.domain.User;
+import com.fuckSpring.domain.paramBean.UserRequestVO;
 import com.fuckSpring.service.UserService;
 import com.fuckSpring.service.pollService.xinfulaiqiaomen.HttpSenderTestService;
 import com.fuckSpring.service.pollService.xinfulaiqiaomen.XflqmService;
@@ -64,17 +65,15 @@ public class HelloBootController {
     }
 
     @ApiOperation(value = "创建用户", notes = "第二个接口")
-    @RequestMapping(value = "/ctu", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public User createUser(@RequestBody Map<String, String> map) {
-        String name = (String) map.get("name");
-        int age = Integer.parseInt((String) map.get("age"));
-        logger.info("user.name={},user.age={}", name, age);
-        return this.userService.crtUser(name, age);
+    @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public User createUser(@RequestBody UserRequestVO userRequestVO) {
+        logger.info("user.name={},user.age={}", userRequestVO.getName(), userRequestVO.getAge());
+        return this.userService.crtUser(userRequestVO.getName(), userRequestVO.getAge());
     }
 
     @ApiOperation(value = "获取用户", notes = "第三个接口")
-    @RequestMapping(value = "/getu", method = RequestMethod.GET)
-    public String findUser(@ApiParam("用户名") String name) {
-        return this.userService.findByName(name).toString();
+    @RequestMapping(value = "/user", method = RequestMethod.GET,produces = MediaType.APPLICATION_XHTML_XML_VALUE)
+    public User findUser(@ApiParam("用户名") @RequestParam String name) {
+        return this.userService.findByName(name);
     }
 }

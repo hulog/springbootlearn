@@ -9,11 +9,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,15 +17,12 @@ import java.util.List;
 /**
  * Created by upsmart on 17-6-6.
  */
-@Service
+//@Service
 public final class KdlGetterService implements GetterService {
 
     private static final Logger logger = LoggerFactory.getLogger(GetterService.class);
 
-    private final OkHttpClient okHttpClient;
-    private final AmqpTemplate amqpTemplate;
-    private final StringRedisTemplate stringRedisTemplate;
-
+    private final OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
     // 爬取代理的目标网站相关
     private static final String HREF = "http://www.kuaidaili.com/proxylist/";
     private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0";
@@ -38,13 +30,6 @@ public final class KdlGetterService implements GetterService {
     private static final int MAX_PAGE = 10; //主页只支持10页查询
 //    private int current_page = 0;
 
-
-    @Autowired
-    public KdlGetterService(AmqpTemplate amqpTemplate, StringRedisTemplate stringRedisTemplate, @Qualifier("getClient") OkHttpClient okHttpClient) {
-        this.amqpTemplate = amqpTemplate;
-        this.stringRedisTemplate = stringRedisTemplate;
-        this.okHttpClient = okHttpClient;
-    }
 
     @Override
     public int getMaxPage() {
@@ -61,7 +46,6 @@ public final class KdlGetterService implements GetterService {
         return HREF + pageNum + "/";
     }
 
-    @Override
     public String getHtmlByUrl(String url) {
         //因为url中协议就占了4位，所以判断length<5
         if (null == url || url.length() < 5 || !url.startsWith("http")) {
@@ -117,6 +101,11 @@ public final class KdlGetterService implements GetterService {
     @Override
     public void sendToProxyPool(IpInfoDO ipInfoDO) {
 
+    }
+
+    @Override
+    public String toString() {
+        return "Kdl";
     }
 
 //    @Override

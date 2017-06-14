@@ -1,6 +1,9 @@
 package com.fuckSpring.config.property;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +15,7 @@ public class RabbitConfig {
 
     @Bean
     public Queue getQueue() {
-        return new Queue("Ip_Proxy_Queue");
+        return new Queue("Ip_Proxy_Queue", true);
     }
+
 }

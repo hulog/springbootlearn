@@ -5,8 +5,7 @@ import com.fuckSpring.domain.pollRelated.IpInfoDO;
 import java.util.List;
 
 /**
- * @Description:
- * Proxy 爬取接口，爬取各大代理网站都需实现此接口
+ * @Description: Proxy 爬取接口，爬取各大代理网站都需实现此接口
  * @Date: 17-6-12
  * @Time: 下午3:41
  * @Author: hl
@@ -17,7 +16,7 @@ public interface GetterService {
 
     String createSpiderUrl(int pageNum);
 
-    String getHtmlByUrl(String url);
+//    String getHtmlByUrl(String url);
 
     List<IpInfoDO> parseBody(String body);
 

@@ -1,5 +1,6 @@
 package com.fuckSpring.config;
 
+import com.fuckSpring.domain.pollRelated.IpInfoDO;
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +26,7 @@ public class OkHttpConfiguration {
     public OkHttpClient getProxyClient() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
-                .readTimeout(5,TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
                 .build();
         return okHttpClient;
     }

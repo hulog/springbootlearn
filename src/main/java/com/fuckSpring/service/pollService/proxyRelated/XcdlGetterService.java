@@ -20,11 +20,6 @@ public class XcdlGetterService implements GetterService {
     }
 
     @Override
-    public String getHtmlByUrl(String url) {
-        return null;
-    }
-
-    @Override
     public List<IpInfoDO> parseBody(String body) {
         return null;
     }
