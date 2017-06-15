@@ -1,6 +1,6 @@
 //package com.fuckSpring;
 //
-//import com.fuckSpring.config.property.MysqlProperties;
+//import com.fuckSpring.config.MysqlProperties;
 //import com.fuckSpring.controller.HelloBootController;
 //import org.junit.Assert;
 //import org.junit.Test;

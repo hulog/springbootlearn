@@ -3,6 +3,7 @@ package com.fuckSpring.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.mapstruct.Mapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -22,6 +23,8 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 @EnableCaching
 public class RedisConfiguration extends CachingConfigurerSupport {
 
+    private static final int _1min = 60;
+
     @Bean
     public KeyGenerator wiselyKeyGenerator() {
         return (o, method, objects) -> {
@@ -37,7 +40,10 @@ public class RedisConfiguration extends CachingConfigurerSupport {
 
     @Bean
     public CacheManager cacheManager(RedisTemplate redisTemplate) {
-        return new RedisCacheManager(redisTemplate);
+        RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate);
+        //TODO 最好在配置文件中设置过期时间
+        redisCacheManager.setDefaultExpiration(5 * _1min); //默认过期时间5分钟
+        return redisCacheManager;
     }
 
     @Bean

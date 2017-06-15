@@ -1,4 +1,4 @@
-package com.fuckSpring.config.property;
+package com.fuckSpring.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.DirectExchange;

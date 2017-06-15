@@ -23,4 +23,12 @@ public class UserRequestVO {
     public void setAge(int age) {
         this.age = age;
     }
+
+    @Override
+    public String toString() {
+        return "UserRequestVO{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }

@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,15 +60,16 @@ public class HelloBootController {
 
     @ApiOperation(value = "测试接口", notes = "第一个接口")
     @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @Cacheable(value = "cache1", keyGenerator = "wiselyKeyGenerator")
     public String test() {
         logger.info("enter test()");
+        logger.info("缓存miss");
         return "Hello Spring Boot!";
     }
 
     @ApiOperation(value = "创建用户", notes = "第二个接口")
     @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public User createUser(@RequestBody UserRequestVO userRequestVO) {
-        logger.info("user.name={},user.age={}", userRequestVO.getName(), userRequestVO.getAge());
         return this.userService.crtUser(userRequestVO.getName(), userRequestVO.getAge());
     }
 
