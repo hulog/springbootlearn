@@ -37,7 +37,7 @@ public class WebLogAspect {
         HttpServletRequest request = requestAttributes.getRequest();
 
         //打印请求内容
-        logger.info("===============请求内容===============");
+        logger.info("===============请==求==内==容(Start)===============");
         logger.info("客户端IP:{}", request.getRemoteAddr());
         logger.info("请求地址:{}", request.getRequestURL().toString());
         logger.info("请求方式:{}", request.getMethod());
@@ -45,7 +45,7 @@ public class WebLogAspect {
         List<Object> argsList = new ArrayList<>();
         Arrays.stream(joinPoint.getArgs()).forEach(argsList::add);
         logger.info("请求类方法参数:{}", this.toJsonString(argsList));
-        logger.info("===============请求内容===============");
+        logger.info("===============请==求==内==容( End )===============");
     }
 
     private String toJsonString(Object object) {
