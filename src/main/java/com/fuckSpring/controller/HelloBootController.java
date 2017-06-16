@@ -12,11 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Created by upsmart on 17-5-11.
@@ -68,13 +66,13 @@ public class HelloBootController {
     }
 
     @ApiOperation(value = "创建用户", notes = "第二个接口")
-    @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     public User createUser(@RequestBody UserRequestVO userRequestVO) {
         return this.userService.crtUser(userRequestVO.getName(), userRequestVO.getAge());
     }
 
     @ApiOperation(value = "获取用户", notes = "第三个接口")
-    @RequestMapping(value = "/user", method = RequestMethod.GET,produces = MediaType.APPLICATION_XHTML_XML_VALUE)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     public User findUser(@ApiParam("用户名") @RequestParam String name) {
         return this.userService.findByName(name);
     }

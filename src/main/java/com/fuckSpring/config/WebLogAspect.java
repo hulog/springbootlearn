@@ -3,10 +3,8 @@ package com.fuckSpring.config;
 
 import com.alibaba.fastjson.JSON;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -55,5 +53,20 @@ public class WebLogAspect {
     @AfterReturning(returning = "ret", pointcut = "ctrlLog()")
     public void doCtrlReturning(Object ret) {
         logger.info("返回数据:{}", this.toJsonString(ret));
+    }
+
+    @Around("ctrlLog()")
+    public Object doAround(ProceedingJoinPoint proceedingJoinPoint) {
+        logger.info("Controller层切面已执行");
+        long start = System.currentTimeMillis();
+        Object proceed = null;
+        try {
+            proceed = proceedingJoinPoint.proceed();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+        long elapsedTime = System.currentTimeMillis() - start;
+        logger.info("执行时间:{}ms", elapsedTime);
+        return proceed;
     }
 }

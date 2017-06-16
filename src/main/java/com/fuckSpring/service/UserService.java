@@ -2,6 +2,8 @@ package com.fuckSpring.service;
 
 import com.fuckSpring.domain.User;
 import com.fuckSpring.repository.UserRepository;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,7 +20,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Cacheable(value = "usercache",)
+    //    @Cacheable(value = "usercache",)
     public User crtUser(String name, int age) {
         User user = new User();
         user.setAge(age);
