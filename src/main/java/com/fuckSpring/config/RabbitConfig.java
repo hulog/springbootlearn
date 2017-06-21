@@ -17,5 +17,4 @@ public class RabbitConfig {
     public Queue getQueue() {
         return new Queue("Ip_Proxy_Queue", true);
     }
-
 }
