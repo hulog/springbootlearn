@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description:
- * 1. 用于检测代理池中IP数量是否足够（undo）
+ * @Description: 1. 用于检测代理池中IP数量是否足够（undo）
  * 2. 检测代理的有效性
  * 3. 定期爬取
  * @Date: 17-6-12
@@ -27,19 +27,17 @@ public class GetterHelperService {
 
     private Logger logger = LoggerFactory.getLogger(GetterHelperService.class);
 
-    //    @Autowired
-//    private KdlGetterService kdlGetterService;
     @Autowired
     private AmqpTemplate amqpTemplate;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-//    @Scheduled(fixedDelay = 5 * 60 * 1000)
+    @Scheduled(fixedDelay = 5 * 60 * 1000)
     public void task() {
-        run();
+        spiderStartController();
     }
 
-    public void run() {
+    public void spiderStartController() {
         sendToProxyPool(spiderRun(new KdlGetterService()));
         sendToProxyPool(spiderRun(new XcdlGetterService()));
     }
@@ -54,7 +52,7 @@ public class GetterHelperService {
     }
 
     private List<IpInfoDO> spiderRun(GetterService gs) {
-        logger.info("Start===================={}=======================", gs.toString());
+        logger.info("Start*******************{}***********************", gs.toString());
         List<IpInfoDO> rstList = new ArrayList<>();
         List<IpInfoDO> proxyIps;
         int currentPageNum = 0;
@@ -65,6 +63,7 @@ public class GetterHelperService {
             if (null == proxyIps || proxyIps.size() == 0) {
                 continue;
             }
+            // 在redis中检测该代理网站IP信息是否更新（redis中数据15min更新一次）
             String ipFlag = this.stringRedisTemplate.opsForValue().get(gs.toString());
             if (currentPageNum == 1 && proxyIps.get(0).getIp().equals(ipFlag)) {
                 logger.warn("{} 代理主页未更新，本次爬取结束", gs.toString());
@@ -75,9 +74,7 @@ public class GetterHelperService {
             logger.info("在 {} 中爬取到 {} 条数据", spiderUrl, proxyIps.size());
             rstList.addAll(proxyIps);
         }
-
-
-        logger.info("End=================={}===========================", gs.toString());
+        logger.info("End*******************{}***********************", gs.toString());
         return rstList;
     }
 
