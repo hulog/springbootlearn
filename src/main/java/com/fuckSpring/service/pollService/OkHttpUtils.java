@@ -19,7 +19,7 @@ public final class OkHttpUtils {
 
     private static OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
 
-    public static String getHtmlByUrl(String url) {
+    public static String getStringByGet(String url) {
         if (null == url || url.length() < 5 || !url.startsWith("http")) {
             return null;
         }

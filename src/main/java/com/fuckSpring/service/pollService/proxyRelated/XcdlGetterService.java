@@ -24,8 +24,8 @@ public class XcdlGetterService implements GetterService {
         return null;
     }
 
-    @Override
-    public void sendToProxyPool(IpInfoDO ipInfoDO) {
-
-    }
+//    @Override
+//    public void sendToProxyPool(IpInfoDO ipInfoDO) {
+//
+//    }
 }

@@ -16,11 +16,12 @@ public interface GetterService {
 
     String createSpiderUrl(int pageNum);
 
-//    String getHtmlByUrl(String url);
+//    String getStringByGet(String url);
 
     List<IpInfoDO> parseBody(String body);
 
-    void sendToProxyPool(IpInfoDO ipInfoDO);
+//    //在没有控制器的情况下，由各代理自行发送到消息队列
+//    void sendToProxyPool(IpInfoDO ipInfoDO);
 
 //    List<IpInfoDO> spiderRun();
 }

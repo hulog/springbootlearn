@@ -1,6 +1,7 @@
 package com.fuckSpring.controller;
 
 import com.fuckSpring.domain.User;
+import com.fuckSpring.domain.paramBean.TestVO;
 import com.fuckSpring.domain.paramBean.UserRequestVO;
 import com.fuckSpring.service.UserService;
 import com.fuckSpring.service.pollService.xinfulaiqiaomen.HttpSenderTestService;
@@ -15,6 +16,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by upsmart on 17-5-11.
@@ -57,7 +59,7 @@ public class HelloBootController {
 
 
     @ApiOperation(value = "测试接口", notes = "第一个接口")
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
     @Cacheable(value = "cache1", keyGenerator = "wiselyKeyGenerator")
     public String test() {
         logger.info("enter test()");

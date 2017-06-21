@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description: 1. 用于检测代理池中IP数量是否足够（undo）
+ * @Description:
+ * 1. 用于检测代理池中IP数量是否足够（undo）
  * 2. 检测代理的有效性
  * 3. 定期爬取
  * @Date: 17-6-12
@@ -40,8 +40,8 @@ public class GetterHelperService {
     }
 
     public void run() {
-        KdlGetterService kdl = new KdlGetterService();
-        sendToProxyPool(spiderRun(kdl));
+        sendToProxyPool(spiderRun(new KdlGetterService()));
+        sendToProxyPool(spiderRun(new XcdlGetterService()));
     }
 
     private void sender(IpInfoDO ipInfoDO) {
@@ -61,7 +61,7 @@ public class GetterHelperService {
         while (currentPageNum < gs.getMaxPage()) {
             currentPageNum++;
             String spiderUrl = gs.createSpiderUrl(currentPageNum);
-            proxyIps = gs.parseBody(OkHttpUtils.getHtmlByUrl(spiderUrl));
+            proxyIps = gs.parseBody(OkHttpUtils.getStringByGet(spiderUrl));
             if (null == proxyIps || proxyIps.size() == 0) {
                 continue;
             }

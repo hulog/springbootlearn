@@ -1,6 +1,7 @@
 package com.fuckSpring.service.pollService.proxyRelated;
 
 import com.fuckSpring.domain.pollRelated.IpInfoDO;
+import com.fuckSpring.service.pollService.OkHttpUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -22,13 +23,10 @@ public final class KdlGetterService implements GetterService {
 
     private static final Logger logger = LoggerFactory.getLogger(GetterService.class);
 
-    private final OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
     // 爬取代理的目标网站相关
     private static final String HREF = "http://www.kuaidaili.com/proxylist/";
-    private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0";
 
     private static final int MAX_PAGE = 10; //主页只支持10页查询
-//    private int current_page = 0;
 
 
     @Override
@@ -46,31 +44,9 @@ public final class KdlGetterService implements GetterService {
         return HREF + pageNum + "/";
     }
 
-    public String getHtmlByUrl(String url) {
-        //因为url中协议就占了4位，所以判断length<5
-        if (null == url || url.length() < 5 || !url.startsWith("http")) {
-            return null;
-        }
-        Request req = new Request.Builder()
-                .url(url)
-                .header("User-Agent", USER_AGENT)
-                .get()
-                .build();
-        Response rsp;
-        String html = null;
-        try {
-            rsp = this.okHttpClient.newCall(req).execute();
-            if (null != rsp && rsp.isSuccessful()) {
-                ResponseBody body = rsp.body();
-                if (body != null) {
-                    html = body.string();
-                }
-            }
-        } catch (Exception e) {
-            logger.error("[快代理] !!!!!Ops,爬取url: {} 出错:{}", url, e.getMessage());
-        }
-        return html;
-    }
+//    public String getHtmlByUrl(String url) {
+//        return OkHttpUtils.getStringByGet(url);
+//    }
 
     @Override
     public List<IpInfoDO> parseBody(String body) {
@@ -98,14 +74,14 @@ public final class KdlGetterService implements GetterService {
         return rstList;
     }
 
-    @Override
-    public void sendToProxyPool(IpInfoDO ipInfoDO) {
-
-    }
+//    @Override
+//    public void sendToProxyPool(IpInfoDO ipInfoDO) {
+//
+//    }
 
     @Override
     public String toString() {
-        return "Kdl";
+        return "[快代理]";
     }
 
 //    @Override
@@ -117,7 +93,7 @@ public final class KdlGetterService implements GetterService {
 //        while (current_page < MAX_PAGE) {
 //            current_page++;
 //            String spiderUrl = createSpiderUrl(current_page);
-//            proxyIps = parseBody(getHtmlByUrl(spiderUrl));
+//            proxyIps = parseBody(getStringByGet(spiderUrl));
 //            logger.info("在 {} 中爬取到 {} 条数据", spiderUrl, proxyIps.size());
 //            rstList.addAll(proxyIps);
 //        }

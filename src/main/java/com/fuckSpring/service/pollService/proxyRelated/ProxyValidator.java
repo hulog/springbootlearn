@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by upsmart on 17-6-12.
  */
 @Component
-@RabbitListener(queues = "Ip_Proxy_Queue")
 public class ProxyValidator {
 
     @Autowired

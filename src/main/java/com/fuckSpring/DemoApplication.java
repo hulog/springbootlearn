@@ -5,14 +5,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @SpringBootApplication
 @EnableScheduling
 public class DemoApplication {
 
     public static void main(String[] args) throws IOException {
+//        String s = "das,adf";
+//        String[] split = s.split(",");
+//        System.out.println(Arrays.toString(split));
+
         SpringApplication.run(DemoApplication.class, args);
-//    }
+    }
 //        OkHttpClient client = new OkHttpClient.Builder()
 //                .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("121.232.144.214", 9000)))
 //                .connectTimeout(20, TimeUnit.SECONDS)
@@ -40,5 +45,5 @@ public class DemoApplication {
 //        }else {
 //            System.out.println("--00--");
 //        }
-    }
+//    }
 }
