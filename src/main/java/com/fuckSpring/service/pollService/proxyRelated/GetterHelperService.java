@@ -43,7 +43,7 @@ public class GetterHelperService {
     }
 
     private void sender(IpInfoDO ipInfoDO) {
-        this.amqpTemplate.convertAndSend("Ip_Proxy_Queue", ipInfoDO);
+        this.amqpTemplate.convertAndSend("Ip_Proxy_Queue",ipInfoDO);
     }
 
     private void sendToProxyPool(List<IpInfoDO> ips) {

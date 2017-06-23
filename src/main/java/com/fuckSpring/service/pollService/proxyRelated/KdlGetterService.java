@@ -18,7 +18,6 @@ import java.util.List;
 /**
  * Created by upsmart on 17-6-6.
  */
-//@Service
 public final class KdlGetterService implements GetterService {
 
     private static final Logger logger = LoggerFactory.getLogger(GetterService.class);
@@ -81,7 +80,7 @@ public final class KdlGetterService implements GetterService {
 
     @Override
     public String toString() {
-        return "[快代理]";
+        return "快代理";
     }
 
 //    @Override
