@@ -35,6 +35,7 @@ public class UserService {
     }
 
     public User findByName(String name) {
+        this.userRepository.findOne(2);
         return this.userRepository.findByName(name);
     }
 }

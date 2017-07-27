@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ProxyValidator {
 
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
     private ExecutorService es = Executors.newFixedThreadPool(50);
+    private StringRedisTemplate stringRedisTemplate;
     private static AtomicInteger count = new AtomicInteger(0);
     private static AtomicInteger su = new AtomicInteger(0);
 

@@ -1,11 +1,9 @@
 package com.fuckSpring.controller;
 
 import com.fuckSpring.domain.User;
-import com.fuckSpring.domain.paramBean.TestVO;
 import com.fuckSpring.domain.paramBean.UserRequestVO;
 import com.fuckSpring.service.UserService;
 import com.fuckSpring.service.pollService.xinfulaiqiaomen.HttpSenderTestService;
-import com.fuckSpring.service.pollService.xinfulaiqiaomen.XflqmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -16,7 +14,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Created by upsmart on 17-5-11.
@@ -33,10 +30,6 @@ public class HelloBootController {
 
     @Autowired
     private HttpSenderTestService httpSenderTestService;
-
-    @Autowired
-    private XflqmService xinfulaiqiaomenService;
-
 
     @ApiOperation(value = "获取服务器返回头内容", notes = "从服务器返回的Header中解析")
     @RequestMapping(value = "serverHeaderContent", method = RequestMethod.GET)

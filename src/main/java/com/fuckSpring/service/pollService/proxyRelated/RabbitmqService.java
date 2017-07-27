@@ -23,9 +23,9 @@ import java.util.List;
  * @Author: hl
  */
 @Service
-public class GetterHelperService {
+public class RabbitmqService {
 
-    private Logger logger = LoggerFactory.getLogger(GetterHelperService.class);
+    private Logger logger = LoggerFactory.getLogger(RabbitmqService.class);
 
     @Autowired
     private AmqpTemplate amqpTemplate;
@@ -43,7 +43,7 @@ public class GetterHelperService {
     }
 
     private void sender(IpInfoDO ipInfoDO) {
-        this.amqpTemplate.convertAndSend("Ip_Proxy_Queue",ipInfoDO);
+        this.amqpTemplate.convertAndSend("Ip_Proxy_Queue", ipInfoDO);
     }
 
     private void sendToProxyPool(List<IpInfoDO> ips) {
