@@ -1,21 +1,19 @@
-package com.fuckSpring.service.pollService;
+package com.fuckSpring.util.okhttp;
 
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by upsmart on 17-6-13.
  */
 @Component
-public final class OkHttpUtils {
+public final class OkHttpUtils_bak {
 
     private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0";
 
-    private static Logger logger = LoggerFactory.getLogger(OkHttpUtils.class);
+    private static Logger logger = LoggerFactory.getLogger(OkHttpUtils_bak.class);
 
     private static OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
 
@@ -35,6 +33,9 @@ public final class OkHttpUtils {
         String html = null;
         try {
             rsp = okHttpClient.newCall(request).execute();
+
+
+
             if (null != rsp && rsp.isSuccessful()) {
                 ResponseBody body = rsp.body();
                 if (body != null) {
