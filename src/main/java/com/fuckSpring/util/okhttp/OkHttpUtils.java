@@ -1,6 +1,7 @@
 package com.fuckSpring.util.okhttp;
 
 import okhttp3.*;
+import okhttp3.internal.Util;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,10 +12,10 @@ import java.util.concurrent.TimeUnit;
  * 进度:
  * 1. 完成同步Get请求
  * 2. 完成异步Get请求
- * 3. (未)完成同步Post表单请求
- * 4. (未)完成异步Post表单请求
- * 5. (未)完成同步PostJSON请求
- * 6. (未)完成异步PostJSON请求
+ * 3. 完成同步Post表单请求
+ * 4. 完成异步Post表单请求
+ * 5. 完成同步PostJSON请求
+ * 6. 完成异步PostJSON请求
  *
  * @Author: norman
  */
@@ -26,27 +27,9 @@ public final class OkHttpUtils {
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .readTimeout(20, TimeUnit.SECONDS).build();
 
+    private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+
     private OkHttpUtils() {
-    }
-
-    public static void post(String url, Callback callback) {
-        post(url, null, null, callback);
-    }
-
-    public static void post(String url, Map<String, String> paramsMap, Callback callback) {
-        post(url, paramsMap, null, callback);
-    }
-
-    public static void post(String url, Map<String, String> paramsMap, Map<String, String> headersMap, Callback callback) {
-        //TODO
-    }
-
-    public static void postJson(String url, String jsonStr, Callback callback) {
-        postJson(url, jsonStr, null, callback);
-    }
-
-    public static void postJson(String url, String jsonStr, Map<String, String> headersMap, Callback callback) {
-        //TODO
     }
 
     private static class Method {
@@ -192,66 +175,136 @@ public final class OkHttpUtils {
         client.newCall(reqBuilder.build()).enqueue(callback);
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        // HttpsUtils.SSLParams sslSocketFactory = HttpsUtils.getSslSocketFactory(null, null, null);
-        // OkHttpClient ok = new OkHttpClient.Builder()
-        // .sslSocketFactory(sslSocketFactory.sSLSocketFactory, sslSocketFactory.trustManager)
-        // .followRedirects(true)
-        // .build();
+    public static Response post(String url) throws IOException {
+        return post(url, null, null);
+    }
 
-        // Request request = new Request.Builder()
-        //         .get()
-        //         .url("https://www.baidu.com/")
-        //         .build();
-        // System.out.println(Thread.currentThread().getId() + "\tjjjj");
-        // ok.newCall(request)
-        //         // .execute();
-        //         .enqueue(new Callback() {
-        //             @Override
-        //             public void onFailure(Call call, IOException e) {
-        //                 e.printStackTrace();
-        //                 System.out.println("失败咯");
-        //             }
-        //
-        //             @Override
-        //             public void onResponse(Call call, Response response) throws IOException {
-        //                 System.out.println(response.headers().toString());
-        //                 System.out.println(response.toString());
-        //                 System.out.println(response.body().string());
-        //                 System.out.println(Thread.currentThread().getId() + "\t成功咯");
-        //             }
-        //         });
-        // System.out.println(Thread.currentThread().getId() + "\teeeyyy");
-        // Thread.currentThread().join();
+    public static Response post(String url, Map<String, String> paramsMap) throws IOException {
+        return post(url, paramsMap, null);
+    }
 
-        Map<String, String> head = new HashMap<>();
-        head.put("user-agent", "IDEA;chrome");
-        for (int i = 0; i < 10; i++) {
+    /**
+     * 同步表单Post请求
+     *
+     * @param url        请求地址
+     * @param paramsMap  请求参数
+     * @param headersMap 请求头参数
+     * @return Response
+     * @throws IOException 取消请求造成的异常
+     */
+    public static Response post(String url, Map<String, String> paramsMap, Map<String, String> headersMap) throws IOException {
 
-            OkHttpUtils.getAsyc("https://www.baidu.com", new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    System.out.println("访问百度失败咯");
-                }
+        // 0. 创建新请求
+        Request.Builder reqBuilder = new Request.Builder();
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    System.out.println(Thread.currentThread().getName() + "访问百度成功:" + response.code());
-                }
-            });
+        // 1. 组装请求体
+        reqBuilder.post(makePostPramasByForm(paramsMap));
 
+        // 2. 组装URL
+        reqBuilder.url(url);
 
-            OkHttpUtils.getAsyc("http://localhost:8999/oktest", null, head, new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    System.out.println("失败咯");
-                }
+        // 3. 组装Header
+        makeHeaders(reqBuilder, headersMap);
+        // reqBuilder.addHeader("ddg", "ggh");
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    System.out.println(Thread.currentThread().getName() + "[客户端]:" + response.body().string());
-                }
-            });
+        //4. 发送请求
+        return client.newCall(reqBuilder.build()).execute();
+    }
+
+    public static void postAsyc(String url, Callback callback) {
+        postAsyc(url, null, null, callback);
+    }
+
+    public static void postAsyc(String url, Map<String, String> paramsMap, Callback callback) {
+        postAsyc(url, paramsMap, null, callback);
+    }
+
+    public static void postAsyc(String url, Map<String, String> paramsMap, Map<String, String> headersMap, Callback callback) {
+        // 0. 创建新请求
+        Request.Builder reqBuilder = new Request.Builder();
+
+        // 1. 组装请求体
+        reqBuilder.post(makePostPramasByForm(paramsMap));
+
+        // 2. 组装URL
+        reqBuilder.url(url);
+
+        // 3. 组装Header
+        makeHeaders(reqBuilder, headersMap);
+
+        //4. 发送请求
+        client.newCall(reqBuilder.build()).enqueue(callback);
+    }
+
+    public static Response postJson(String url, String jsonStr) throws IOException {
+        return postJson(url, jsonStr, null);
+    }
+
+    public static Response postJson(String url, String jsonStr, Map<String, String> headersMap) throws IOException {
+
+        // 0. 创建新请求
+        Request.Builder reqBuilder = new Request.Builder();
+
+        // 1. 组装请求体
+        reqBuilder.post(RequestBody.create(JSON, jsonStr));
+
+        // 2. 组装URL
+        reqBuilder.url(url);
+
+        // 3. 组装Header
+        makeHeaders(reqBuilder, headersMap);
+
+        //4. 发送请求
+        return client.newCall(reqBuilder.build()).execute();
+    }
+
+    public static void postJsonAsyc(String url, String jsonStr, Callback callback) {
+        postJsonAsyc(url, jsonStr, null, callback);
+    }
+
+    public static void postJsonAsyc(String url, String jsonStr, Map<String, String> headersMap, Callback callback) {
+
+        // 0. 创建新请求
+        Request.Builder reqBuilder = new Request.Builder();
+
+        // 1. 组装请求体
+        reqBuilder.post(RequestBody.create(JSON, jsonStr));
+
+        // 2. 组装URL
+        reqBuilder.url(url);
+
+        // 3. 组装Header
+        makeHeaders(reqBuilder, headersMap);
+
+        //4. 发送请求
+        client.newCall(reqBuilder.build()).enqueue(callback);
+    }
+
+    /**
+     * 根据表单请求参数生成RequestBody
+     *
+     * @param paramsMap 请求参数
+     * @return RequestBody
+     */
+    private static RequestBody makePostPramasByForm(Map<String, String> paramsMap) {
+        if (paramsMap == null || paramsMap.size() < 1) {
+            return Util.EMPTY_REQUEST;
         }
+        FormBody.Builder formBody = new FormBody.Builder();
+        for (String key : paramsMap.keySet()) {
+            formBody.add(key, paramsMap.get(key));
+        }
+        return formBody.build();
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        Map<String, String> p = new HashMap<>();
+        p.put("uuu", "da");
+        p.put("ooo", "da1");
+        Map<String, String> h = new HashMap<>();
+        h.put("dhd", "dagh");
+
+        System.out.println(OkHttpUtils.post("http://localhost:8999/oktest", p, h).body().string());
     }
 }
