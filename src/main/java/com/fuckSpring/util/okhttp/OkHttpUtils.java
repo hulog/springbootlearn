@@ -305,6 +305,10 @@ public final class OkHttpUtils {
         Map<String, String> h = new HashMap<>();
         h.put("dhd", "dagh");
 
-        System.out.println(OkHttpUtils.post("http://localhost:8999/oktest", p, h).body().string());
+        String js = "{\n" +
+                "  \"uuu\":\"345\",\n" +
+                "  \"ooo\":\"ttj\"\n" +
+                "}";
+        System.out.println(OkHttpUtils.postJson("http://localhost:8999/oktest", js, h).body().string());
     }
 }

@@ -1,16 +1,9 @@
 package com.fuckSpring.service.pollService.proxyRelated;
 
 import com.fuckSpring.domain.pollRelated.IpInfoDO;
-import com.fuckSpring.service.pollService.OkHttpUtils;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +11,13 @@ import java.util.List;
 /**
  * Created by upsmart on 17-6-6.
  */
-public final class KdlGetterService implements GetterService {
-
-    private static final Logger logger = LoggerFactory.getLogger(GetterService.class);
+@Component
+public final class KdlGetterService extends abstractGetService {
 
     // 爬取代理的目标网站相关
     private static final String HREF = "http://www.kuaidaili.com/proxylist/";
 
     private static final int MAX_PAGE = 10; //主页只支持10页查询
-
 
     @Override
     public int getMaxPage() {
