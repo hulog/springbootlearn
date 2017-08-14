@@ -12,10 +12,6 @@ import java.util.Arrays;
 public class DemoApplication {
 
     public static void main(String[] args) throws IOException {
-//        String s = "das,adf";
-//        String[] split = s.split(",");
-//        System.out.println(Arrays.toString(split));
-
         SpringApplication.run(DemoApplication.class, args);
     }
 //        OkHttpClient client = new OkHttpClient.Builder()

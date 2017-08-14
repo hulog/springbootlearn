@@ -1,14 +1,17 @@
 package com.fuckSpring.controller;
 
-import org.junit.Assert;
+import com.google.common.collect.Multimap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.junit.Assert.*;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 /**
  * Created by upsmart on 17-5-27.
@@ -18,14 +21,24 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class HelloBootControllerTest {
 
-    @Autowired
-    private HelloBootController helloBootController;
+    private MockMvc mockMvc;
+
+    @Before
+    public void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(new HelloBootController()).build();
+    }
 
     @Test
     public void findUser() throws Exception {
-//        Assert.assertEquals("www", this.helloBootController.findUser("wjm"));
-
-        this.helloBootController.findUser("wjm");
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .get("/user")
+                                .param("name", "wjm")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
     }
 
 }

@@ -34,11 +34,6 @@ public final class OkHttpUtils {
     private OkHttpUtils() {
     }
 
-    private static class Method {
-        public static final String GET = "get";
-        public static final String POST = "post";
-    }
-
     /**
      * 组装请求头
      *
