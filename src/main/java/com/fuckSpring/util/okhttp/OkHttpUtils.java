@@ -21,13 +21,15 @@ import java.util.concurrent.TimeUnit;
  */
 public final class OkHttpUtils {
 
+
     // 使用默认配置
     // 注意：dispatcher中维护了一个线程池，限制了异步请求数：同一主机一次最多5个请求；若不同主机，并发限制在64个
     // 可进行修改，类似于client.dispatcher().setMaxRequestsPerHost()或client.dispatcher().setMaxRequests();
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .readTimeout(20, TimeUnit.SECONDS).build();
 
-    private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+    private static final String USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0";
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private OkHttpUtils() {
     }
@@ -44,6 +46,7 @@ public final class OkHttpUtils {
      * @return
      */
     private static void makeHeaders(Request.Builder builder, Map<String, String> headersMap) {
+        builder.header("User-Agent", USER_AGENT);
         if (headersMap == null || headersMap.size() < 1) {
             return;
         }
