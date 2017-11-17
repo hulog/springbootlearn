@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @SpringBootApplication
 @EnableScheduling
@@ -34,12 +33,5 @@ public class DemoApplication {
 //            System.out.println(e.getMessage());
 //
 //        }
-//        System.out.println(execute.code());
-//        if (execute.isSuccessful()) {
-////                System.out.println(execute.body().bytes());
-//            System.out.println(execute.body().string());
-//        }else {
-//            System.out.println("--00--");
-//        }
-//    }
+
 }
